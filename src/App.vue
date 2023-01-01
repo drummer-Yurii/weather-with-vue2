@@ -1,5 +1,6 @@
 <template>
-  <div id="app">
+  <div class="main">
+    <NavigationVue class="navigation" />
     <router-view/>
   </div>
 </template>
@@ -7,12 +8,15 @@
 <script>
 import axios from 'axios'
 import db from './firebase/firebaseinit';
+import NavigationVue from './components/NavigationVue.vue'
 export default {
   name: "App",
+  components: {
+    NavigationVue
+  },
   data() {
     return {
       APIkey: "6992d12cfcf737e0568f3ad5c5898cbe",
-      city: "Detroit",
       cities: []
     }
   },
@@ -46,12 +50,6 @@ export default {
         })
       })
     },
-    getCurrentWeather() {
-      axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&units=imperial&APPID=${this.APIkey}`
-      ).then(res => {
-        console.log(res.data);
-      })
-    }
   }
 }
 </script>
@@ -62,5 +60,20 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
+}
+
+.main {
+  height: 100vh;
+  .navigation {
+    z-index: 99;
+    position: fixed;
+    max-width: 1024px;
+    width: 100%;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .container {
+    padding: 0 20px;
+  }
 }
 </style>
