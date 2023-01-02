@@ -2,7 +2,7 @@
   <div class="main">
     <ModalVue v-if="modalOpen" v-on:close-modal="toggleModal" :APIkey="APIkey" />
     <NavigationVue v-on:add-city="toggleModal" v-on:edit-city="toggleEdit" />
-    <router-view v-bind:cities="cities" v-bind:edit="edit" />
+    <router-view v-bind:cities="cities" v-bind:edit="edit" :APIkey="APIkey" />
   </div>
 </template>
 
