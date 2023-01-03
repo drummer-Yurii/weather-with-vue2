@@ -1,8 +1,21 @@
 <template>
   <div class="main">
     <ModalVue v-if="modalOpen" v-on:close-modal="toggleModal" :APIkey="APIkey" />
-    <NavigationVue v-on:add-city="toggleModal" v-on:edit-city="toggleEdit" />
-    <router-view v-bind:cities="cities" v-bind:edit="edit" :APIkey="APIkey" />
+    <NavigationVue 
+      v-on:add-city="toggleModal" 
+      v-on:edit-city="toggleEdit" 
+      :addCityActive="addCityActive" 
+      :isDay="isDay"
+      :isNight="isNight"
+    />
+    <router-view 
+      v-bind:cities="cities" 
+      v-bind:edit="edit" 
+      :APIkey="APIkey" 
+      v-on:is-day="dayTime" 
+      v-on:is-night="nightTime" 
+      v-on:resetDays="resetDays"
+    />
   </div>
 </template>
 
@@ -19,14 +32,18 @@ export default {
   },
   data() {
     return {
+      isDay: null,
+      isNight: null,
       APIkey: "6992d12cfcf737e0568f3ad5c5898cbe",
       cities: [],
       modalOpen: null,
-      edit: null
+      edit: null,
+      addCityActive: null
     }
   },
   created() {
-    this.getCityWeather()
+    this.getCityWeather();
+    this.checkRoute();
   },
   methods: {
     getCityWeather() {
@@ -62,6 +79,29 @@ export default {
     },
     toggleEdit() {
       this.edit = !this.edit
+    },
+    checkRoute() {
+      if (this.$route.name === "AddCity") {
+        this.addCityActive = true
+      } else {
+        this.addCityActive = false
+      }
+      console.log(this.addCityActive);
+    },
+    dayTime() {
+      this.isDay = !this.isDay;
+    },
+    nightTime() {
+      this.isNight = !this.isNight;
+    },
+    resetDays() {
+      this.isDay = false;
+      this.isNight = false;
+    }
+  },
+  watch: {
+    $route() {
+      this.checkRoute();
     }
   }
 }
