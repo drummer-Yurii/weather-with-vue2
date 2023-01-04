@@ -36,7 +36,7 @@ export default {
     return {
       isDay: null,
       isNight: null,
-      APIkey: "6992d12cfcf737e0568f3ad5c5898cbe",
+      APIkey: "54059395e8ae58dc1a4718e6a14832d3",
       cities: [],
       modalOpen: null,
       edit: null,
