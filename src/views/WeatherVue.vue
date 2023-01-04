@@ -8,6 +8,7 @@
           <CurrentWeather :isDay="isDay" :isNight="isNight" :currentWeather="currentWeather" />
           <HourlyWeather :forecast="forecast" />
           <WeeklyForecast :forecast="forecast" />
+          <AdditionalInfo :currentWeather="currentWeather" />
         </div>
       </div>
     </div>
@@ -18,13 +19,15 @@ import db from '../firebase/firebaseinit'
 import CurrentWeather from '@/components/CurrentWeather.vue';
 import HourlyWeather from '@/components/HourlyWeather.vue';
 import WeeklyForecast from '@/components/WeeklyForecast.vue';
+import AdditionalInfo from '@/components/AdditionalInfo.vue';
 export default {
     name: 'WeatherVue',
     props: ['APIkey', 'isDay', 'isNight'],
     components: {
       CurrentWeather,
       HourlyWeather,
-      WeeklyForecast
+      WeeklyForecast,
+      AdditionalInfo
     },
     data() {
       return {
@@ -52,8 +55,8 @@ export default {
             this.currentWeather = doc.data().currentWeather;
             axios.get(
               `https://api.openweathermap.org/data/2.5/onecall?lat=${doc.data().currentWeather.coord.lat}&lon=${
-                doc.data().currentWeather.coord.lon
-              }&exclude=current,minutley,alerts&units=imperial&appid=${this.APIkey}`
+                  doc.data().currentWeather.coord.lon
+                }&exclude=current,minutley,alerts&units=imperial&appid=${this.APIkey}`
             ).then((res) => {
               this.forecast = res.data
             }).then(() => {

@@ -56,7 +56,9 @@ export default {
           if (doc.type === 'added' && !doc.doc.Nd) {
             try {
               const response = await axios.get(
-                `https://api.openweathermap.org/data/2.5/weather?q=${doc.doc.data().city}&units=imperial&APPID=${this.APIkey}`
+                `https://api.openweathermap.org/data/2.5/weather?q=${doc.doc.data().city}&units=imperial&APPID=${
+                  this.APIkey
+                }`
               );
               const data = response.data;
               firebaseDB.doc(doc.doc.id).update({
