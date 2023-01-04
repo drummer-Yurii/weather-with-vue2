@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <ModalVue v-if="modalOpen" v-on:close-modal="toggleModal" :APIkey="APIkey" />
+    <div v-if="isLoading" class="loading">
+      <span></span>
+    </div>
+    <div v-else class="app">
+      <ModalVue v-if="modalOpen" v-on:close-modal="toggleModal" :APIkey="APIkey" :cities="cities" />
     <NavigationVue 
       v-on:add-city="toggleModal" 
       v-on:edit-city="toggleEdit" 
@@ -17,7 +21,9 @@
       v-on:is-day="dayTime" 
       v-on:is-night="nightTime" 
       v-on:resetDays="resetDays"
+      v-on:add-city="toggleModal"
     />
+    </div>
   </div>
 </template>
 
@@ -40,7 +46,8 @@ export default {
       cities: [],
       modalOpen: null,
       edit: null,
-      addCityActive: null
+      addCityActive: null,
+      isLoading: true
     }
   },
   created() {
@@ -52,6 +59,9 @@ export default {
       let firebaseDB = db.collection('cities');
 
       firebaseDB.onSnapshot((snap) => {
+        if (snap.docs.length === 0) {
+          this.isLoading = false
+        }
         snap.docChanges().forEach(async (doc) => {
           if (doc.type === 'added' && !doc.doc.Nd) {
             try {
@@ -66,6 +76,7 @@ export default {
               })
                 .then(() => {
                 this.cities.push(doc.doc.data());
+                this.isLoading = false;
               })
             } catch (err) {
               console.log(err);
@@ -138,4 +149,27 @@ export default {
     padding: 0 20px;
   }
 }
+
+.loading {
+  @keyframes spin {
+    to {
+      transform: rotateZ(360deg);
+    }
+  }
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  span {
+    display: block;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+    border: 2px solid transparent;
+    border-top-color: #142a5f;
+    border-radius: 50%;
+    animation: spin ease 1000ms infinite;
+  }
+} 
 </style>
