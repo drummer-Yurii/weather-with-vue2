@@ -28,19 +28,21 @@ export default {
         removeCity() {
             db.collection('cities')
                 .where('city', '==', `${this.city.city}`)
-                .get().then(docs => {
-                    docs.forEach(doc => {
-                        this.id = doc.id
+                .get().then((docs) => {
+                    docs.forEach((doc) => {
+                        this.id = doc.id;
                     })
                 }).then(() => {
-                    db.collection('cities').doc(this.id).delete()
-                })
+                    db.collection('cities')
+                    .doc(this.id)
+                    .delete()
+                });
         },
         goToWeather(e) {
             if (e.target === this.$refs.edit) {
                 // 
             } else {
-                this.$router.push({name: 'Weather', params: {city: this.city.city}})
+                this.$router.push({name: 'WeatherVue', params: {city: this.city.city}})
             }
         }
     }

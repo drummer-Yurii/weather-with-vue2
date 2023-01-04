@@ -8,7 +8,9 @@
       :isDay="isDay"
       :isNight="isNight"
     />
-    <router-view 
+    <router-view
+      :isDay="isDay"
+      :isNight="isNight" 
       v-bind:cities="cities" 
       v-bind:edit="edit" 
       :APIkey="APIkey" 
@@ -49,7 +51,7 @@ export default {
     getCityWeather() {
       let firebaseDB = db.collection('cities');
 
-      firebaseDB.onSnapshot(snap => {
+      firebaseDB.onSnapshot((snap) => {
         snap.docChanges().forEach(async (doc) => {
           if (doc.type === 'added' && !doc.doc.Nd) {
             try {
@@ -69,7 +71,7 @@ export default {
           } else if (doc.type === 'added' && doc.doc.Nd) {
             this.cities.push(doc.doc.data());
           } else if (doc.type === 'removed') {
-            this.cities = this.cities.filter(city => city.city !== doc.doc.data().city)
+            this.cities = this.cities.filter((city) => city.city !== doc.doc.data().city)
           }
         })
       })
@@ -86,7 +88,6 @@ export default {
       } else {
         this.addCityActive = false
       }
-      console.log(this.addCityActive);
     },
     dayTime() {
       this.isDay = !this.isDay;
@@ -113,6 +114,18 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
+}
+
+.day {
+    transition: 500ms ease all;
+    background-color: rgb(59, 150, 249);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.night {
+    transition: 500ms ease all;
+    background-color: rgb(20, 42, 95);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .main {
